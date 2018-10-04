@@ -1,0 +1,19 @@
+function stimulateAll(s,outputSignal,nrStimulators, pauseTime, nrReps, order)
+
+for ii = 1: (5*nrReps)
+    if ~contains (order ,'all')   % vibrate all stimulators at once
+        error ('No order given')
+    else
+        allOutputs = outputSignal;
+        
+        for out = 1 : (nrStimulators-1)
+            allOutputs = cat(2, allOutputs, outputSignal);
+        end
+        % queue the data and start the vibration
+        queueOutputData(s, repmat(allOutputs, 10, 1));
+        s.startForeground;
+    end
+end
+
+end
+
