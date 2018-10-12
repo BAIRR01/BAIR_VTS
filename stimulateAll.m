@@ -13,7 +13,7 @@ for ii = 1: (nrReps)
         end
         
         % Queue the data and start the vibration
-        queueOutputData(s, repmat(allOutputs, 10, 1));
+        queueOutputData(s, allOutputs);
         s.startForeground;
     end
     pause(pauseTime); % pause between each repetition

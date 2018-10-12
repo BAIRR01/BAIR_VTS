@@ -23,7 +23,7 @@ for ii = 1: nrReps
         allOutputs(:, (stimOrderIdx(jj))) = outputSignal;
         
         % queue the data and start the vibration
-        queueOutputData(s, repmat(allOutputs, 10, 1));
+        queueOutputData(s, allOutputs);
         s.startForeground;
         
         pause(pauseTime); % pause between fingers
