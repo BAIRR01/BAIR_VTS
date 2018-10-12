@@ -35,10 +35,10 @@ AssertOpenGL;
 Screen('Preference','SkipSyncTests', params.skipSyncTests);
 
 % Open the screen
-params.display = openScreen(params.display);
+%params.display = openScreen(params.display);
 
 % to allow blending
-Screen('BlendFunction', params.display.windowPtr, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+%Screen('BlendFunction', params.display.windowPtr, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 % set priority
 Priority(params.runPriority);
