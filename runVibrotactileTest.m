@@ -79,7 +79,7 @@ daq1 =  'cDAQ1mod1';
 %daq2 = 'cDAQ1mod2';
 
 % Create output signal (for now, use a square wave)
-outputSignal = square(linspace(0, (2*pi*5),(a.Rate * stimTime)'));
+outputSignal = square(linspace(0, (2*pi*5),(s.Rate * stimTime)'));
 
 % add all the output channels to the session
 for ii = 0: (nrStimulators-1)

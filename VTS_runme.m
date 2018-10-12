@@ -27,7 +27,7 @@ params.shiftDestRect    = siteSpecs.displaypos;
 % Additional parameters 
 params.prescanDuration  = 0;
 params.startScan        = 0;
-VTSOptions.experiment   = params.experiment;
+VTSOptions.experiment   = {params.experiment};
 
 % Set priority (depends on operating system)
 if ispc

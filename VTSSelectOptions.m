@@ -7,11 +7,11 @@ defaults = {'5', '5', '5','12', '12'};
 [answer] = inputdlg(prompt, 'VTS Options', 1, defaults);
 
 if ~isempty(answer)
-    VTSOptions.nrStimulators = answer{1,:};
-    VTSOptions.nrReps        = answer{2,:};
-    VTSOptions.nrFingers     = answer{3,:};
-    VTSOptions.stimTime      = answer{4,:};
-    VTSOptions.pauseTime     = answer{5,:};
+    VTSOptions.nrStimulators = str2num(answer{1,:});
+    VTSOptions.nrReps        = str2num(answer{2,:});
+    VTSOptions.nrFingers     = str2num(answer{3,:});
+    VTSOptions.stimTime      = str2num(answer{4,:});
+    VTSOptions.pauseTime     = str2num(answer{5,:});
     selectionMade            = 1;
 else
     VTSOptions               = [];
