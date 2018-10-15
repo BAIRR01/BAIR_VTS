@@ -20,5 +20,4 @@ for ii = 1: length(orderList)
     quitProg = VTS_runme(orderList{ii}, runIDs(ii),experimentSpecs(whichSite,:), subjID, sessionID, VTSOptions);
     if quitProg, break; end
 end
-
-
+        

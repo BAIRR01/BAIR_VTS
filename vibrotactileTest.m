@@ -7,7 +7,7 @@ function runVibrotactileTest (nrStimulators, nrFingers , nrReps , stimTime , pau
 s = daq.createSession('ni');
 
 % Rate of operation in scans per second
-s.Rate              = 1000;
+s.Rate              = 3000;
 
 stimTime     = 12;   % of stimulation for computation
 nrReps        = 5;    % Number of repetitions

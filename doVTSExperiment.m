@@ -25,9 +25,9 @@ params         = setFixationParamsVTS(params);
 % the ones we are using are loaded.
 KbCheck;GetSecs;WaitSecs(0.001);
 
-
+ PsychDebugWindowConfiguration(0,0.5);
 % Turn off screen warnings
-Screen('Preference','VisualDebugLevel', 50);
+Screen('Preference','VisualDebugLevel', 0);
 
 % check for OpenGL
 AssertOpenGL;
@@ -35,16 +35,16 @@ AssertOpenGL;
 Screen('Preference','SkipSyncTests', params.skipSyncTests);
 
 % Open the screen
-%params.display = openScreen(params.display);
+params.display = openScreen(params.display);
 
 % to allow blending
-%Screen('BlendFunction', params.display.windowPtr, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+Screen('BlendFunction', params.display.windowPtr, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 % set priority
 Priority(params.runPriority);
 
 % wait for go signal
-% [~, quitProg] = VTS_pressKey2Begin(params);
+ [~, quitProg] = VTS_pressKey2Begin(params);
 % 
 % if ~quitProg
     % Do the experiment!
@@ -61,7 +61,7 @@ Priority(params.runPriority);
 % end
 
 % Close the one on-screen and many off-screen windows
-%closeScreen(params.display);
+closeScreen(params.display);
 %ListenChar(1)
 
 return;
