@@ -6,12 +6,13 @@ function [time0, quitProg] = VTS_pressKey2Begin(params)
 % returns the current time at start of scan, and ok (true if experiment is
 %       started, false if the quit key is pressed)
 
-
 if ischar(params.triggerKey)
-    promptString = sprintf('Running pattern:%s run %d. Please press %s key to begin, or %s to quit.', ...
+    promptString = sprintf(['Stim pattern: %s_run-%d. \r\n'...
+        'Please press %s key to begin, or %s to quit.'], ...
         params.experiment, params.runID, params.triggerKey, params.quitProgKey);
 else
-    promptString = sprintf('Running pattern:%s run %d. Experiment will begin when trigger is received.', ...
+    promptString = sprintf(['Running stim pattern: %s_run-%d. \r\n '... 
+        'Experiment will begin when trigger is received.'], ...
         params.experiment, params.runID);
 end
 
@@ -50,13 +51,14 @@ while iwait
             case params.triggerKey
                 iwait = false;
                 quitProg = false;
-                drawFixation(params);
-                Screen('Flip',display.windowPtr);
+                
             otherwise
                 % do nothing
         end
     end
 end
+drawFixation(params);
+Screen('Flip',params.display.windowPtr);
 
 time0 = GetSecs;
 

@@ -41,7 +41,7 @@ Priority(params.runPriority);
 % wait for go signal
  [~, quitProg] = VTS_pressKey2Begin(params);
 % 
-% if ~quitProg
+ if ~quitProg
     % Do the experiment!
     
     runVibrotactileTest ([],[],[],[],[], VTSOptions);
@@ -53,7 +53,7 @@ Priority(params.runPriority);
     
     % Save (eventually TSV file)
     
-% end
+ end
 
 % Close the one on-screen and many off-screen windows
 closeScreen(params.display);
