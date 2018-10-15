@@ -37,7 +37,7 @@ function runVibrotactileTest (nrStimulators, nrReps, nrFingers  , stimTime , pau
 % 
 % runVibrotactileTest ([],[],[],[],[], VTSOptions);
 
-% Check for Options
+%% Check for Options
 
 if exist('VTSOptions' , 'var') && ~isempty(VTSOptions)
     nrStimulators = VTSOptions.nrStimulators;
@@ -73,25 +73,43 @@ end
 s = daq.createSession('ni');
 
 % Rate of operation in scans per second
-s.Rate              = 1000;
+s.Rate              = 2000;
+
 % DAQ names (each can run up to 10 stimulators)
 daq1 =  'cDAQ1mod1';
 %daq2 = 'cDAQ1mod2';
 
-% Create output signal (for now, use a square wave)
-outputSignal = square(linspace(0, (2*pi*5),(s.Rate * stimTime))');
-
-% add all the output channels to the session
+% Add all the output channels to the session
 for ii = 0: (nrStimulators-1)
     stimName = sprintf('ao%d', ii);
     addAnalogOutputChannel(s,daq1, stimName, 'Voltage');
 end
 
-% %% Load in the experimental sequence order 
-% 
-% % Prompt user input
-% [fname,path] = uigetfile('.txt' ,'Select order sequence file');
-% orderList = importdata(fullfile (path,fname));
+%% Create output tactile signal (for now, use a sin wave)
+
+% Set parameters for making the tactile signal
+stimFreq            = 30;   % frequency of signal
+stimDur             = 400;  % duration of one continuous tactile stimulation in ms
+interStimDur        = 100;  % duration of wait period between stimulations
+stimPerLocation     = 6;    % number of consecutive stimulations per location (e.g., per finger)
+
+% One cycle of stimulation to be repeated for each finger
+x = (2 * pi * stimFreq * stimDur/1000);
+stimCycle = sin(linspace(0,x, stimDur * s.Rate/1000)');
+
+% one cycle of stimulation with pause to be repeated for each finger
+fullCycle = [stimCycle; zeros(interStimDur * s.Rate/1000, 1)]; 
+
+% signal for one tactile stimulus (e.g., per finger)
+outputSignal = repmat(fullCycle,stimPerLocation,1); 
+
+ %% Load in the experimental sequence order if not given
+
+if ~exist('orderList', 'var') || isempty(orderList)
+    % Prompt user input
+    [fname,path] = uigetfile('.txt' ,'Select order sequence file');
+    orderList = importdata(fullfile (path,fname));
+end
 
 %% Stimulate the piezo stimulators
 
