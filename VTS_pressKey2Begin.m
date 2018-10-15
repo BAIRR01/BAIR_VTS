@@ -50,6 +50,8 @@ while iwait
             case params.triggerKey
                 iwait = false;
                 quitProg = false;
+                drawFixation(params);
+                Screen('Flip',display.windowPtr);
             otherwise
                 % do nothing
         end
@@ -57,7 +59,6 @@ while iwait
 end
 
 time0 = GetSecs;
-drawFixation(params);
 
 return;
 
