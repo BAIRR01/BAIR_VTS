@@ -1,16 +1,16 @@
-function runVibrotactileTest (nrStimulators, nrReps, nrFingers  , stimTime , pauseTime, VTSOptions)
+function stimulus = runVibrotactileTest (nrStimulators, nrReps, nrFingers  , stimTime , pauseTime, VTSOptions)
 % Runs a simple tactile experiment
 %
 % runVibrotactileTest (nrStimulators, nrReps, [nrFingers] , [stimTime] , [pauseTime], [VTSOptions])
-% 
+%
 % Required Input:
-% 
+%
 %   nrStimulators   : Number of stumulators
 %   nrReps          : Number of repetitions
-% 
+%
 % Optional Input:
-%     nrFingers     : Number of fingers to be stimulate 
-%         default : 5 
+%     nrFingers     : Number of fingers to be stimulate
+%         default : 5
 %     stimTime      : Seconds of stimulation
 %         default : 12
 %     pauseTime     : Seconds to pause
@@ -19,22 +19,22 @@ function runVibrotactileTest (nrStimulators, nrReps, nrFingers  , stimTime , pau
 %
 % Example:
 %
-% nrStimulators = 5;     
-% nrReps        = 5;     
-% nrFingers     = 5;     
-% stimTime      = 12;   
-% pauseTime     = 12;   
-% 
+% nrStimulators = 5;
+% nrReps        = 5;
+% nrFingers     = 5;
+% stimTime      = 12;
+% pauseTime     = 12;
+%
 % runVibrotactileTest (nrStimulators, nrFingers , nrReps , stimTime , pauseTime)
-% 
+%
 % Example 2:
-% 
+%
 % VTSOptions.nrStimulators = 5;
 % VTSOptions.nrReps        = 5;
 % VTSOptions.nrFingers     = 5;
 % VTSOptions.stimTime      = 12;
 % VTSOptions.pauseTime     = 12;
-% 
+%
 % runVibrotactileTest ([],[],[],[],[], VTSOptions);
 
 %% Check for Options
@@ -49,7 +49,7 @@ if exist('VTSOptions' , 'var') && ~isempty(VTSOptions)
 end
 
 % Check for Required inputs
-if ~exist('nrStimulators', 'var') 
+if ~exist('nrStimulators', 'var')
     error ('nrStimulators is a required input')
 end
 if ~exist('nrReps', 'var') || isempty(nrReps)
@@ -70,10 +70,8 @@ end
 %% Set up the session
 
 % Initialize the session and parameters
-s = daq.createSession('ni');
-
-% Rate of operation in scans per second
-s.Rate              = 2000;
+s       = daq.createSession('ni');
+s.Rate  = 2000; % Rate of operation (scans/s)
 
 % DAQ names (each can run up to 10 stimulators)
 daq1 =  'cDAQ1mod1';
@@ -84,6 +82,9 @@ for ii = 0: (nrStimulators-1)
     stimName = sprintf('ao%d', ii);
     addAnalogOutputChannel(s,daq1, stimName, 'Voltage');
 end
+
+% Add a listener to record timing
+lh = addlistener(s,'DataAvailable',@findTiming)
 
 %% Create output tactile signal (for now, use a sin wave)
 
@@ -97,14 +98,16 @@ stimPerLocation     = 6;    % number of consecutive stimulations per location (e
 x = (2 * pi * stimFreq * stimDur/1000);
 stimCycle = sin(linspace(0,x, stimDur * s.Rate/1000)');
 
-% one cycle of stimulation with pause to be repeated for each finger
-fullCycle = [stimCycle; zeros(interStimDur * s.Rate/1000, 1)]; 
+% One cycle of stimulation with pause to be repeated for each finger
+fullCycle = [stimCycle; zeros(interStimDur * s.Rate/1000, 1)];
+
+% Use timing of a full cycle to set listener rate
+s.NotifyWhenDataAvailableExceeds = length(fullCycle);
 
 % signal for one tactile stimulus (e.g., per finger)
-outputSignal = repmat(fullCycle,stimPerLocation,1); 
+outputSignal = repmat(fullCycle,stimPerLocation,1);
 
- %% Load in the experimental sequence order if not given
-
+%% Load in the experimental sequence order if not given
 if ~exist('orderList', 'var') || isempty(orderList)
     % Prompt user input
     [fname,path] = uigetfile('.txt' ,'Select order sequence file');
@@ -114,3 +117,15 @@ end
 %% Stimulate the piezo stimulators
 
 stimulateFingers(s,outputSignal,nrStimulators, pauseTime, nrReps,orderList, nrFingers)
+
+delete(lh); % Delete the listener
+
+%% Callback function for listener
+
+% Finds periodic timing to write into TSV file
+    function findTiming(src,event)
+        count = 1;
+        stimulus.onsets(count) = event.TimeStamps;
+        count = count+1;
+    end
+end
