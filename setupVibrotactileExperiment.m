@@ -1,4 +1,4 @@
-function runVibrotactileTest (nrStimulators, nrSweeps, nrFingers, stimTime, blankTime , VTSOptions)
+function runVibrotactileExperiment(nrStimulators, nrSweeps, nrFingers, stimTime, blankTime, VTSOptions)
 % Runs a simple tactile experiment
 %
 % runVibrotactileTest (nrStimulators, nrSweeps, [nrFingers] , [stimTime], [VTSOptions])
@@ -71,7 +71,7 @@ daq1 =  'cDAQ1mod1';
 %daq2 = 'cDAQ1mod2';
 
 % Add all the output channels to the session
-for ii = 0: (nrStimulators-1)
+for ii = 0:(nrStimulators-1)
     stimName = sprintf('ao%d', ii);
     addAnalogOutputChannel(s,daq1, stimName, 'Voltage');
 end

@@ -16,7 +16,7 @@ if ~fileSelected, return; end
 if ~selectionMade, return; end
 
 % Run these experiments!
-for ii = 1: length(orderList)
+for ii = 1:length(orderList)
     quitProg = VTS_runme(orderList{ii}, runIDs(ii),experimentSpecs(whichSite,:), subjID, sessionID, VTSOptions);
     if quitProg, break; end
 end

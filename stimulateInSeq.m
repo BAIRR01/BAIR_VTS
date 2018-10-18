@@ -1,6 +1,6 @@
 % Vibrates the vibrotactile stimulators in order based on provided .txt file
 
-function stimulateInSeq(s,outputSignal,nrStimulators, nrReps, order)
+function allOutputs = stimulateInSeq(s,outputSignal,nrStimulators, nrSweeps, order, blankTime)
 
 switch order
     case 'random'     % random sampling of fingers
@@ -13,25 +13,30 @@ switch order
         error ('No order sequence specified')
 end
 
-for ii = 1: nrReps
-    % find the length of the signal we want to use
-    outputDur = length(outputSignal);
-    
-    for jj = 1:nrStimulators
-        % set all output channels to 0 except the selected one
-        allOutputs = zeros(outputDur, nrStimulators);
-        allOutputs(:, (stimOrderIdx(jj))) = outputSignal;
+outputSignalLength = length(outputSignal);
+stimOutputs = zeros(outputSignalLength * length(stimOrderIdx) * nrSweeps, nrStimulators);
         
-        % queue the data and start the vibration
-        queueOutputData(s, allOutputs);
+for ii = 1:nrSweeps
+   
+    
+    for jj = 1:length(stimOrderIdx)
+        % set all output channels to 0 except the selected one
+        stimOutputs((1:outputSignalLength) + (jj - 1)*outputSignalLength ...
+            + (ii - 1)*outputSignalLength*length(stimOrderIdx),...
+            (stimOrderIdx(jj))) = outputSignal;
+    end
+end
+    
+allOutputs = [zeros(blankTime * s.Rate, nrStimulators); stimOutputs;...
+    zeros(blankTime * s.Rate, nrStimulators)];
+       
         
         %         % Add a listener to record timing
         %         lh = addlistener(s,'DataAvailable',@(src,event) table());
         %         s.NotifyWhenDataAvailableExceeds = 1000;
-        s.startBackground;
-    end
+      
+ 
 end
-pause(12); % pause at the end of scan
-end
+
 
 

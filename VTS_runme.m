@@ -1,6 +1,6 @@
 %adjust this to tactile experiment
 
-function quitProg = VTS_runme(experimentOrder,runID, siteSpecs, subjID, sessionID, VTSOptions)
+function quitProg = VTS_runme(experimentOrder, runID, siteSpecs, subjID, sessionID, VTSOptions)
 
 if notDefined('siteSpecs')
     help(mfilename)
