@@ -26,7 +26,6 @@ Screen('Preference','VisualDebugLevel', 0);
 
 % check for OpenGL
 AssertOpenGL;
-
 Screen('Preference','SkipSyncTests', params.skipSyncTests);
 
 % Open the screen
@@ -38,45 +37,41 @@ Screen('BlendFunction', params.display.windowPtr, GL_SRC_ALPHA, GL_ONE_MINUS_SRC
 % set priority
 Priority(params.runPriority);
 
-handleVibrotactileDevice = setupVibrotactileDevice([], VTSOptions);
-stimulusVibrotactileExperiment = createVibrotactileStimulus([], [], [], [], [], VTSOptions, handleVibrotactileDevice);
+% Setup the device session and make the stimulus matrix
+VTSDesviceSess = setupVibrotactileDevice([], VTSOptions);
+vibrotactileStimulus = createVibrotactileStimulus([], [], [], [], [], VTSOptions, VTSDesviceSess);
 
 % wait for go signal
 [~, quitProg] = VTS_pressKey2Begin(params);
 %
 if ~quitProg
     % Do the experiment!
-
-    runVibrotactileExperiment(handleVibrotactileDevice, stimulusVibrotactileExperiment)
-    
-%     runVibrotactileTest([],[],[],[],[], VTSOptions);
+    runVibrotactileExperiment(VTSDesviceSess, vibrotactileStimulus)
     
     % After experiment
     
-%     % Add table with elements to write to tsv file for BIDS
-%     onset       = reshape([0 round(stimulus.onsets,3)], [length(stimulus.onsets) 1]);
-%     duration    = ones(length(stimulus.onsets),1) * (length(fullCycle)/s.Rate); %seconds
-%     trial_type  = ones(length(stimulus.onsets),1);
-%     trial_name  = repmat({orderList}, length(outputSignal),1);
-%     
-%     % Write out the tsv file
-%     stimulus.tsv = table(onset, duration, trial_type, trial_name);
-%    
+    %     % Add table with elements to write to tsv file for BIDS
+    %     onset       = reshape([0 round(stimulus.onsets,3)], [length(stimulus.onsets) 1]);
+    %     duration    = ones(length(stimulus.onsets),1) * (length(fullCycle)/s.Rate); %seconds
+    %     trial_type  = ones(length(stimulus.onsets),1);
+    %     trial_name  = repmat({orderList}, length(outputSignal),1);
+    %
+    %     % Write out the tsv file
+    %     stimulus.tsv = table(onset, duration, trial_type, trial_name);
+    
     % Reset priority
     Priority(0);
     
-%     % Save TSV
-%      if any(contains(fieldnames(stimulus), 'tsv'))
-%         numberOfEventsPerRun = size(stimulus.tsv,1);
-%         stimulus.tsv.stim_file = repmat(sprintf('%s.mat', fname), numberOfEventsPerRun,1);
-%         writetable(stimulus.tsv, fullfile(pth, sprintf('%s.tsv', fname)), ...
-%             'FileType','text', 'Delimiter', '\t')
-%      end
+    %     % Save TSV
+    %      if any(contains(fieldnames(stimulus), 'tsv'))
+    %         numberOfEventsPerRun = size(stimulus.tsv,1);
+    %         stimulus.tsv.stim_file = repmat(sprintf('%s.mat', fname), numberOfEventsPerRun,1);
+    %         writetable(stimulus.tsv, fullfile(pth, sprintf('%s.tsv', fname)), ...
+    %             'FileType','text', 'Delimiter', '\t')
+    %      end
 end
-
 % Close the one on-screen and many off-screen windows
 closeScreen(params.display);
 ListenChar(1)
-
 return;
 

@@ -7,13 +7,10 @@ function [time0, quitProg] = VTS_pressKey2Begin(params)
 %       started, false if the quit key is pressed)
 
 if ischar(params.triggerKey)
-    promptString = sprintf(['Stim pattern: %s_run-%d. \r\n'...
-        'Please press %s key to begin, or %s to quit.'], ...
-        params.experiment, params.runID, params.triggerKey, params.quitProgKey);
+    promptString = sprintf('Please press %s key to begin, or %s to quit.', ...
+        params.triggerKey, params.quitProgKey);
 else
-    promptString = sprintf(['Running stim pattern: %s_run-%d. \r\n '... 
-        'Experiment will begin when trigger is received.'], ...
-        params.experiment, params.runID);
+    promptString = sprintf('Experiment will begin when trigger is received.');
 end
 
 Screen('FillRect', params.display.windowPtr, params.display.backColorRgb);

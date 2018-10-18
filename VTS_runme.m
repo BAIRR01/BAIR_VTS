@@ -1,7 +1,7 @@
 %adjust this to tactile experiment
 
 function quitProg = VTS_runme(experimentOrder, runID, siteSpecs, subjID, sessionID, VTSOptions)
-
+% Check for inputs
 if notDefined('siteSpecs')
     help(mfilename)
     error('siteSpecs is a required input');
@@ -11,7 +11,6 @@ if notDefined('sessionID'), sessionID = '01'; end
 if notDefined('VTSOptions'), VTSOptions = []; end
 
 % Set parameters for this experiment
-
 params.experiment       = experimentOrder;
 params.subjID           = subjID;
 params.runID            = runID;

@@ -1,10 +1,11 @@
-% Runs through the list of sequences from .txt file and calls the appropriate function to
-%   start stimulation
+% Creates a matrix containing the signal for the stimulation pattern for
+% the Vibrotactile device. Also adds a blank to the beginning of the
+% experiment for running at the 3T
 
-function stimulusVibrotactileExperiment = createVibrotactileStimulus(nrStimulators, nrSweeps, stimTime, blankTime, order, VTSOptions, handleVibrotactileDevice)
+function vibrotactileStimulus = createVibrotactileStimulus(nrStimulators, nrSweeps,...
+    stimTime, blankTime, order, VTSOptions, VTSDesviceSess)
 
-%% Check for Options
-
+%% Check for Options and inputs
 if exist('VTSOptions' , 'var') && ~isempty(VTSOptions)
     nrStimulators = VTSOptions.nrStimulators;
     nrSweeps      = VTSOptions.nrSweeps;
@@ -15,15 +16,13 @@ end
 
 % Set defaults if not given
 if ~exist('nrStimulators', 'var') || isempty(nrStimulators)
-    nrStimulators     = 5;
+    nrStimulators = 5;
 end
-% Set defaults if not given
 if ~exist('order', 'var') || isempty(order)
-    order     = 'ascending';
+    order = 'ascending';
 end
-% Set defaults if not given
 if ~exist('nrSweeps', 'var') || isempty(nrSweeps)
-    nrSweeps     = 4;
+    nrSweeps = 6;
 end
 if ~exist('stimTime', 'var') || isempty(stimTime)
     stimTime = 6;
@@ -32,6 +31,8 @@ if ~exist('blankTime', 'var') || isempty(blankTime)
     blankTime = 12;
 end
 
+%% Make the signal 
+
 % Set parameters for making the tactile signal
 stimFreq            = 30;   % frequency of signal
 stimDur             = 400;  % duration of one continuous tactile stimulation in ms
@@ -39,17 +40,17 @@ interStimDur        = 100;  % duration of wait period between stimulations
 
 % One cycle of stimulation to be repeated for each finger
 x         = (2 * pi * stimFreq * stimDur/1000);
-stimCycle = sin(linspace(0,x, stimDur * handleVibrotactileDevice.Rate/1000)');
+stimCycle = sin(linspace(0,x, stimDur * VTSDesviceSess.Rate/1000)');
 
 % One cycle of stimulation with pause to be repeated for each finger
-fullCycle = [stimCycle; zeros(interStimDur * handleVibrotactileDevice.Rate/1000, 1)];
+fullCycle = [stimCycle; zeros(interStimDur * VTSDesviceSess.Rate/1000, 1)];
 
 % signal for one tactile stimulus (e.g., per finger)
-stimPerLocation     = stimTime/(length(fullCycle)/handleVibrotactileDevice.Rate);
-outputSignal        = repmat(fullCycle,stimPerLocation,1);
+stimPerLocation     = stimTime/(length(fullCycle)/VTSDesviceSess.Rate); % #reps/finger
+outputSignal        = repmat(fullCycle,stimPerLocation,1); % signal for one finger
 outputSignalLength  = length(outputSignal);
 
-
+% Make a different stimulator index depending on finger order
 switch order
     case 'random'     % random sampling of fingers
         stimOrderIdx = randperm(nrStimulators);
@@ -61,17 +62,17 @@ switch order
         error ('No order sequence specified')
 end
 
-%prepare matrix with all signals send
-stimulusVibrotactileExperiment = zeros(2 * blankTime * handleVibrotactileDevice.Rate + outputSignalLength * length(stimOrderIdx) * nrSweeps, nrStimulators);
+% Prepare matrix with all signals to send to the stimulators
+vibrotactileStimulus = zeros(2 * blankTime * VTSDesviceSess.Rate ...
+    + outputSignalLength * length(stimOrderIdx) * nrSweeps, nrStimulators);
 
-%loop through the sweeps/cycles of one full stimulus order
+% Loop through the sweeps/cycles of one full stimulus order
 for ii = 1:nrSweeps
-    %loop through one stimulus sequence
+    % Loop through one stimulus sequence
     for jj = 1:length(stimOrderIdx)
-        % insert the tactile signal at the respective time point and
-        % stimulator
-        stimulusVibrotactileExperiment((1:outputSignalLength) + blankTime * handleVibrotactileDevice.Rate + (jj - 1)*outputSignalLength ...
-            + (ii - 1)*outputSignalLength*length(stimOrderIdx),...
+        % Insert the tactile signal at the respective time point and stimulator
+        vibrotactileStimulus((1:outputSignalLength) + blankTime * VTSDesviceSess.Rate...
+            + (jj - 1)*outputSignalLength + (ii - 1)*outputSignalLength*length(stimOrderIdx),...
             (stimOrderIdx(jj))) = outputSignal;
     end
 end

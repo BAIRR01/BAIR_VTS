@@ -1,14 +1,18 @@
-function runVibrotactileExperiment(structureVibrotactileDevice, stimulusVibrotactileExperiment)
-% Runs a simple tactile experiment, the device coded in
-% stimulusVibrotactileExperiment is presented through the device connected
-% to
-% structureVibrotactileDevice
+function runVibrotactileExperiment(VTSDeviceSess, vibrotactileStimulus)
+% Runs a simple tactile experiment, the signal coded in VibrotactileStimulus is presented through the device connected
+% to VTSDeviceSess
 %
 
 % queue the data and start the vibration
-queueOutputData(structureVibrotactileDevice, stimulusVibrotactileExperiment);
-fprintf('\nstart the vibrotactile stimulation\n');
-structureVibrotactileDevice.startForeground;
-fprintf('\nended the vibrotactile stimulation\n');
+queueOutputData(VTSDeviceSess, vibrotactileStimulus);
+
+VTSDeviceSess.NotifyWhenDataAvailableExceeds = 500; %hard coded for now
+lh = addlistener(VTSDeviceSess, 'DataAvailable' , @findStumulusTiming);
+
+fprintf('\nStarting the vibrotactile stimulation\n');
+VTSDeviceSess.startForeground;
+fprintf('\nEnded the vibrotactile stimulation\n');
+
+delete(lh)
 
 

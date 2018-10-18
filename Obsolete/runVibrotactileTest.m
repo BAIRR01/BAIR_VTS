@@ -33,11 +33,11 @@ function runVibrotactileTest (nrStimulators, nrSweeps, nrFingers, stimTime, blan
 %
 % runVibrotactileTest ([],[],[],[],[], VTSOptions);
 
-%% Check for Options
+%% Check for Options and Inputs
 
 if exist('VTSOptions' , 'var') && ~isempty(VTSOptions)
     nrStimulators = VTSOptions.nrStimulators;
-    nrSweeps        = VTSOptions.nrSweeps;
+    nrSweeps      = VTSOptions.nrSweeps;
     nrFingers     = VTSOptions.nrFingers;
     stimTime      = VTSOptions.stimTime;
     orderList     = VTSOptions.experiment;
