@@ -1,6 +1,8 @@
 % Before running, use 'tbUse bairstimuli' and make sure the following path:
 % '/Users/winawerlab/MATLAB/toolboxes/Psychtoolbox-3/Psychtoolbox/PsychBasic/MatlabWindowsFilesR2007a' 
 % is moved up one level or the experiment will not run on windows
+% do this by running :
+% addpath C:\Users\winawerlab\Documents\MATLAB\toolboxes\Psychtoolbox-3\Psychtoolbox\PsychBasic\MatlabWindowsFilesR2007a\
 
 % Which site?
 [experimentSpecs, whichSite, selectionMade] = bairExperimentSpecs('prompt', true);
