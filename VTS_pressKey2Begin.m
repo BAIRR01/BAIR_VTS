@@ -22,7 +22,7 @@ iwait = true;
 
 while iwait
     WaitSecs(0.01);
-       
+    
     % KbWait and KbCheck are device dependent. We use KbCheck in a
     % while loop instead of KbWait, as KbWait is reported to be
     % unreliable and would need a device input as well.

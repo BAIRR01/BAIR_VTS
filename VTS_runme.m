@@ -1,19 +1,19 @@
 %adjust this to tactile experiment
 
-function quitProg = VTS_runme(experimentOrder, runID, siteSpecs, subjID, sessionID, VTSOptions)
+function quitProg = VTS_runme(experiment, experimentRunID, siteSpecs, subjID, sessionID, VTSOptions, VTSDevice)
 % Check for inputs
 if notDefined('siteSpecs')
     help(mfilename)
     error('siteSpecs is a required input');
 end
-if notDefined('runID'), runID = 1; end
+if notDefined('runID'), experimentRunID = 1; end
 if notDefined('sessionID'), sessionID = '01'; end
 if notDefined('VTSOptions'), VTSOptions = []; end
 
 % Set parameters for this experiment
-params.experiment       = experimentOrder;
+params.experiment       = experiment;
 params.subjID           = subjID;
-params.runID            = runID;
+params.runID            = experimentRunID;
 params.sessionID        = sessionID;
 params.modality         = siteSpecs.modalities{1};
 params.site             = siteSpecs.sites{1};
@@ -23,10 +23,9 @@ params.useSerialPort    = siteSpecs.serialport;
 params.useEyeTracker    = siteSpecs.eyetracker;
 params.shiftDestRect    = siteSpecs.displaypos;
 
-% Additional parameters 
+% Additional parameters
 params.prescanDuration  = 0;
 params.startScan        = 0;
-VTSOptions.experiment   = {params.experiment};
 
 % Set priority (depends on operating system)
 if ispc
@@ -42,6 +41,6 @@ params.fixation = 'cross';
 params.skipSyncTests = 1;
 
 % Go!
-quitProg = doVTSExperiment(params, VTSOptions);
+quitProg = doVTSExperiment(params, VTSOptions, VTSDevice);
 
 end

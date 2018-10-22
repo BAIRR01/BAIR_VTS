@@ -13,16 +13,20 @@ if ~selectionMade, return; end
 if ~ssDefined, return; end
 
 % What experiment list? 
-[orderList, runIDs, fileSelected] = VTSWhichExperimentList;
+[experimentsList, experimentRepsList, fileSelected] = VTSWhichExperimentList;
 if ~fileSelected, return; end
 
 % What experimental parameters?
 [VTSOptions, selectionMade] = VTSSelectOptions();
 if ~selectionMade, return; end
 
+% Setup the device
+VTSDevice = setupVibrotactileDevice(VTSOptions);
+
 % Run these experiments!
-for ii = 1:length(orderList)
-    quitProg = VTS_runme(orderList{ii}, runIDs(ii),experimentSpecs(whichSite,:), subjID, sessionID, VTSOptions);
+for ii = 1:length(experimentsList)
+    quitProg = VTS_runme(experimentsList{ii}, experimentRepsList(ii),...
+        experimentSpecs(whichSite,:), subjID, sessionID, VTSOptions, VTSDevice);
     if quitProg, break; end
 end
         

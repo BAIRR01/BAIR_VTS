@@ -1,4 +1,4 @@
-function quitProg = doVTSExperiment(params, VTSOptions)
+function quitProg = doVTSExperiment(params, VTSOptions, VTSDevice)
 
 % Set screen params
 params = setScreenParams(params);
@@ -37,17 +37,21 @@ Screen('BlendFunction', params.display.windowPtr, GL_SRC_ALPHA, GL_ONE_MINUS_SRC
 % set priority
 Priority(params.runPriority);
 
-% Setup the device session and make the stimulus matrix
-VTSDesviceSess = setupVibrotactileDevice([], VTSOptions);
-vibrotactileStimulus = createVibrotactileStimulus([], [], [], [], [], VTSOptions, VTSDesviceSess);
+%create vibrotactile stimulus
+vibrotactileStimulus = createVibrotactileStimulus(params.experiment, VTSOptions);
+% queue the data
+queueOutputData(VTSDevice, vibrotactileStimulus);
 
 % wait for go signal
-[~, quitProg] = VTS_pressKey2Begin(params);
+[triggerTime, quitProg] = VTS_pressKey2Begin(params);
 %
 if ~quitProg
     % Do the experiment!
-    runVibrotactileExperiment(VTSDesviceSess, vibrotactileStimulus)
+    [startTime,endTime] = runVibrotactileExperiment(VTSDevice, vibrotactileStimulus);
     
+    fprintf(['\nstart delay (ms): ', num2str(round((startTime - triggerTime)*1000)),'\n'])
+    fprintf(['\nstimulus duration (ms): ', num2str(round((endTime - startTime)*1000)),'\n'])
+
     % After experiment
     
     %     % Add table with elements to write to tsv file for BIDS
