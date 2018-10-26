@@ -38,7 +38,7 @@ Screen('BlendFunction', params.display.windowPtr, GL_SRC_ALPHA, GL_ONE_MINUS_SRC
 Priority(params.runPriority);
 
 %create vibrotactile stimulus
-vibrotactileStimulus = createVibrotactileStimulus(params.experiment, VTSOptions);
+vibrotactileStimulus = createVibrotactileStimulus(params, VTSOptions);
 % queue the data
 queueOutputData(VTSDevice, vibrotactileStimulus);
 

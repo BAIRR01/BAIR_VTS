@@ -2,9 +2,17 @@
 % the Vibrotactile device. Also adds a blank to the beginning of the
 % experiment for running at the 3T
 
-function vibrotactileStimulus = createVibrotactileStimulus(experiment, VTSOptions)
+function vibrotactileStimulus = createVibrotactileStimulus(params, VTSOptions)
 
 %% Check for Options and inputs
+if exist('params' , 'var') && ~isempty(params)
+    experiment = params.experiment;
+    subjID     = params.subjID;
+    runID      = params.runID;
+    sessionID  = params.sessionID;
+else
+    error('params needed');
+end
 if exist('VTSOptions' , 'var') && ~isempty(VTSOptions)
     nrStimulators                       = VTSOptions.nrStimulators;
     tactileFrequency                    = VTSOptions.tactileFrequency;
@@ -19,11 +27,6 @@ if exist('VTSOptions' , 'var') && ~isempty(VTSOptions)
 else
     error('specifications needed');
 end
-
-% without specification of the experiment nothing will work
-if ~experiment, return; end
-
-
 %% Make the signal
 
 % create matrix that holds the per stimulus in sequence which stimulators
@@ -68,7 +71,6 @@ switch experiment
         error ('No stimulation sequence specified')
 end
 
-
 % One base unit of tactile stimulation vibrating with tactile frequency for
 % base on time and not vibrating for tactile off time (in samples)
 onOffPeriod = [1 + sin(...
@@ -81,7 +83,6 @@ onOffPeriod = [1 + sin(...
 % signal for one tactile stimulus (e.g., per finger)
 stimulusSignal          = repmat(onOffPeriod, nrOnOffPeriodsPerStimulus, 1); % signal for one tactile stimulus
 stimulusSignalDuration  = length(stimulusSignal);%in samples
-
 
 % Prepare matrix with all signals to send to the stimulators
 vibrotactileStimulus = zeros(size(stimulusOrder,1)*stimulusSignalDuration,...
@@ -97,5 +98,11 @@ for jj = 1:size(stimulusOrder,1)
             kk) ...
             = stimulusSignal * stimulusOrder(jj, kk);
     end
+    
+    % save figure with images of stimulus
+    f = figure('visible', 'off');
+    imagesc(vibrotactileStimulus)
+    title (experiment)
+    saveas(f, fullfile('./StimImages', sprintf('sub-%s_ses-%s_task-%s_run-%d.png',...
+        subjID, sessionID,experiment,runID)))
 end
-
