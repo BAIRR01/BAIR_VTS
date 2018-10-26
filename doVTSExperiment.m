@@ -57,8 +57,8 @@ if ~quitProg
     %     % Add table with elements to write to tsv file for BIDS
     %     onset       = reshape([0 round(stimulus.onsets,3)], [length(stimulus.onsets) 1]);
     %     duration    = ones(length(stimulus.onsets),1) * (length(fullCycle)/s.Rate); %seconds
-    %     trial_type  = ones(length(stimulus.onsets),1);
-    %     trial_name  = repmat({orderList}, length(outputSignal),1);
+    %     trial_location  = %figure out 
+    %     trial_type  = repmat({orderList}, length(outputSignal),1);
     %
     %     % Write out the tsv file
     %     stimulus.tsv = table(onset, duration, trial_type, trial_name);

@@ -17,8 +17,8 @@ if ~ssDefined, return; end
 if ~fileSelected, return; end
 
 % What experimental parameters?
-[VTSOptions, selectionMade] = VTSSelectOptions();
-if ~selectionMade, return; end
+[VTSOptions, fileSelected] = VTSSelectOptions();
+if ~fileSelected, return; end
 
 % Setup the device
 VTSDevice = setupVibrotactileDevice(VTSOptions);

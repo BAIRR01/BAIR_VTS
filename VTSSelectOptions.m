@@ -1,38 +1,28 @@
 function [VTSOptions, selectionMade] = VTSSelectOptions
 
-prompt = {'Enter number of stimulators to use',...
-    'Enter number of locations to stimulate',...
-    'Enter number of cycles per experiment', ...
-    'Enter how many tactile stimuli constitute one stimulus cycle', ...
-    'Enter how many blank stimuli are within one stimulus cycle', ...
-    'Enter the length of one tactile stimulus (s)', ...
-    'Enter the number of on-off periods within one tactile stimulus',...
-    'Enter the ratio of on-off during one period',...
-    'Enter the length of blank stimuli inserted around/between tactile stimuli within one cycle(s)',...
-    'Enter base frequency of the tactile stimulus (Hz)', ...
-    'Enter frequency of the NIdaq device (Hz)'};
+[fname,path,fileselected] = uigetfile(fullfile('./VTSopts','*.json')...
+    ,'Select VTS Options file');
 
-defaults = {'8', '8', '4', '8', '2', '6', '8', '0.8', '12', '30', '1000'};
-
-[answer] = inputdlg(prompt, 'VTS Options', 1, defaults);
-
-if ~isempty(answer)
-    VTSOptions.nrStimulators                = str2double(answer{1,:});
-    VTSOptions.nrStimulatorLocations        = str2double(answer{2,:});
-    VTSOptions.nrCyclesPerExperiment        = str2double(answer{3,:});
-    VTSOptions.nrStimuliPerCycle            = str2double(answer{4,:});
-    VTSOptions.nrBlanksPerCycle             = str2double(answer{5,:});
-    VTSOptions.tactileStimulusDuration      = str2double(answer{6,:});
-    VTSOptions.nrOnOffPeriodsPerStimulus    = str2double(answer{7,:});
-    VTSOptions.tactileOnOffRatio            = str2double(answer{8,:});
-    VTSOptions.blankStimulusDuration        = str2double(answer{9,:});
-    VTSOptions.tactileFrequency             = str2double(answer{10,:});
-    VTSOptions.NIdaqRate                    = str2double(answer{11,:});
-    selectionMade               = 1;
-else
-    VTSOptions                  = [];
-    selectionMade               = 0;
+if ~fileselected
+    prompt = 'Would you like to make a VTS Options file now? Y/N ';
+    answer = inputdlg(prompt,'Input', 1,{'y'});
+    if string(answer) == 'Y'||'y'
+        VTSoptPath = makeVTSoptFile;
+    else
+        VTSOptions                  = [];
+        selectionMade               = 0;
+        return
+    end
+elseif fileselected
+    VTSoptPath = fullfile(path, fname);
 end
+
+% Read the content of the selected text file
+json = loadjson(VTSoptPath);
+
+% Assign json fields to VTSOptions fields
+VTSOptions = json.VTSOptions;
+selectionMade                         = 1;
 
 % Check for input consistency
 if mod(VTSOptions.blankStimulusDuration, VTSOptions.tactileStimulusDuration) ~= 0

@@ -1,7 +1,8 @@
 function [experimentList, runIDs, selectionMade] = VTSWhichExperimentList
 
 % Prompt user input to load file
-[fname,path,fileselected] = uigetfile('.txt' ,'Select experiment sequence file');
+[fname,path,fileselected] = uigetfile(fullfile('./StimOrders','*.txt'),...
+    'Select experiment sequence file');
 
 if fileselected
     % Read the content of the selected text file
