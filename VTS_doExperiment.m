@@ -1,11 +1,11 @@
-function quitProg = doVTSExperiment(params, VTSOptions, VTSDevice)
+function quitProg = VTS_doExperiment(params, VTSOptions, VTSDevice, VTSStimulusOptions)
 
 % Set screen params
 params = setScreenParams(params);
 
 % Set fixation params
 params.dstRect = [592 172 1328 908]; %for NYU3T
-params         = setFixationParamsVTS(params);
+params         = VTS_setFixationParams(params);
 
 % WARNING! ListChar(2) enables Matlab to record keypresses while disabling
 % output to the command window or editor window. This is good for running
@@ -38,7 +38,7 @@ Screen('BlendFunction', params.display.windowPtr, GL_SRC_ALPHA, GL_ONE_MINUS_SRC
 Priority(params.runPriority);
 
 %create vibrotactile stimulus
-vibrotactileStimulus = createVibrotactileStimulus(params, VTSOptions);
+vibrotactileStimulus = VTS_createVibrotactileStimulus(params, VTSOptions, VTSStimulusOptions);
 % queue the data
 queueOutputData(VTSDevice, vibrotactileStimulus);
 
@@ -46,8 +46,8 @@ queueOutputData(VTSDevice, vibrotactileStimulus);
 [triggerTime, quitProg] = VTS_pressKey2Begin(params);
 %
 if ~quitProg
-    % Do the experiment!
-    [startTime,endTime] = runVibrotactileExperiment(VTSDevice, vibrotactileStimulus);
+    % present the stimulus
+    [startTime,endTime] = VTS_presentStimulus(VTSDevice);
     
     fprintf(['\nstart delay (ms): ', num2str(round((startTime - triggerTime)*1000)),'\n'])
     fprintf(['\nstimulus duration (ms): ', num2str(round((endTime - startTime)*1000)),'\n'])

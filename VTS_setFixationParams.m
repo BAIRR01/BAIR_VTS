@@ -1,4 +1,4 @@
-function params = setFixationParamsVTS(params)
+function params = VTS_setFixationParams(params)
 % setParams - set parameters for different vibrotactile scans 
 %
 % params = setFixationParamsVTS(params)

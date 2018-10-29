@@ -1,6 +1,6 @@
 %adjust this to tactile experiment
 
-function quitProg = VTS_runme(experiment, experimentRunID, siteSpecs, subjID, sessionID, VTSOptions, VTSDevice)
+function quitProg = VTS_runme(experiment, experimentRunID, siteSpecs, subjID, sessionID, VTSOptions, VTSDevice, VTSStimulusOptions)
 % Check for inputs
 if notDefined('siteSpecs')
     help(mfilename)
@@ -40,7 +40,10 @@ params.fixation = 'cross';
 % Debug mode?
 params.skipSyncTests = 1;
 
+% store stimulus as figure
+params.makeFigure = 1;
+
 % Go!
-quitProg = doVTSExperiment(params, VTSOptions, VTSDevice);
+quitProg = VTS_doExperiment(params, VTSOptions, VTSDevice, VTSStimulusOptions);
 
 end
