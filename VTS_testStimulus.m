@@ -1,16 +1,16 @@
 % What experimental parameters?
-[VTSSessionOptions, fileSelected] = VTS_selectSessionOptions();
+[VTSOpts, fileSelected] = VTS_selectSessionOptions();
 if ~fileSelected, return; end
 
 % Setup the device
-VTSDevice = VTS_setupVibrotactileDevice(VTSSessionOptions);
+VTSDevice = VTS_setupVibrotactileDevice(VTSOpts);
 
 % creata params structure for this test case
 params.experiment = 'ascending';
-params.subjID = 'testingStimulator';
+params.subjID     = 'testingStimulator';
 params.makeFigure = 0;
-params.sessionID = 'testingStimulator';
-params.runID = 'testingStimulator';
+params.sessionID  = 'testingStimulator';
+params.runID      = 'testingStimulator';
 
 % select/create json file with stimulus options
 stimOptPath = VTS_selectExperimentOptions(params.experiment);
@@ -18,10 +18,10 @@ stimOptPath = VTS_selectExperimentOptions(params.experiment);
 json = loadjson(stimOptPath);
 
 % Assign json fields to VTSSessionOptions fields
-VTSExperimentOptions = json.VTSExperimentOptions;
+VTSExperimentOpts = json.VTSExperimentOpts;
 
 % create vibrotactile stimulus
-vibrotactileStimulus = VTS_createVibrotactileStimulus(params, VTSSessionOptions, VTSExperimentOptions);
+vibrotactileStimulus = VTS_createVibrotactileStimulus(params, VTSOpts, VTSExperimentOpts);
 
 %initialize keyboard
 KbCheck;
