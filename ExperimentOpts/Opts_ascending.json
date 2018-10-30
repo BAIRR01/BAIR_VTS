@@ -1,15 +1,15 @@
 {
-	"VTSExperimentOptions": {
-		"blankStimulusDuration": 12,
-		"startBlanksPerExperiment": 1,
-		"endBlanksPerExperiment": 1,
-		"nrCyclesPerExperiment": 6,
-		"nrStimuliPerCycle": 6,
+	"VTSExperimentOpts": {
+		"blankStimDur": 12,
+		"preExpBlanks": 1,
+		"postExpBlanks": 1,
+		"nrCyclesPerExp": 6,
+		"nrStimPerCycle": 6,
 		"nrBlanksPerCycle": 0,
-		"tactileStimulusDuration": 6,
-		"nrOnOffPeriodsPerStimulus": 12,
-		"tactileOnOffRatio": 0.8,
-		"tactileFrequency": 30,
-		"optionFileName": "Opts_ascending"
+		"stimDur": 6,
+		"nrPulsesPerStim": 12,
+		"pulseOnDur": 400,
+		"vibrFreq": 30,
+		"optsFname": "Opts_ascending"
 	}
 }

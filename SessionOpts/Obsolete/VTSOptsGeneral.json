@@ -1,5 +1,5 @@
 {
-	"VTSOpts": {
+	"VTSOptions": {
 		"nrStimulators": 6,
 		"NIdaqRate": 1000,
 		"NIdaqNames": [

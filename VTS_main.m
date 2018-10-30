@@ -29,7 +29,7 @@ for ii = 1:length(experimentsList)
     json = loadjson(experimentOptsList{ii});
     
     % Assign json fields to VTSOptions fields
-    VTSExperimentOpts = json.VTSExperimentOptions;
+    VTSExperimentOpts = json.VTSExperimentOpts;
     
     quitProg = VTS_runme(experimentsList{ii}, runIDs(ii), experimentSpecs(whichSite,:),...
         subjID, sessionID, VTSOpts, VTSDevice, VTSExperimentOpts);

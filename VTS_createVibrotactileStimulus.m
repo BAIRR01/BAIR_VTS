@@ -2,7 +2,7 @@
 % the Vibrotactile device. Also adds a blank to the beginning of the
 % experiment for running at the 3T
 
-function [vibrotactileStimulus, tsv] = VTS_createVibrotactileStimulus(params, VTSSessionOptions, VTSExperimentOpts)
+function [vibrotactileStimulus, tsv, fileName] = VTS_createVibrotactileStimulus(params, VTSOpts, VTSExperimentOpts)
 
 %% Check for Options and inputs
 if exist('params' , 'var') && ~isempty(params)
@@ -15,7 +15,7 @@ else
     error('specifications needed');
 end
 
-if exist('VTSSessionOptions' , 'var') && ~isempty(VTSOpts)
+if exist('VTSOpts' , 'var') && ~isempty(VTSOpts)
     nrStimulators                       = VTSOpts.nrStimulators;
     NIdaqRate                           = VTSOpts.NIdaqRate;
 else
@@ -32,7 +32,7 @@ if exist('VTSExperimentOpts' , 'var') && ~isempty(VTSExperimentOpts)
     blankStimDur             = VTSExperimentOpts.blankStimDur;
     vibrFreq                 = VTSExperimentOpts.vibrFreq;
     nrPulsesPerStim          = VTSExperimentOpts.nrPulsesPerStim;
-    pulseOnDurSamp           = VTSExperimentOpts.pulseOnDur; 
+    pulseOnDur               = VTSExperimentOpts.pulseOnDur; 
     stimDur                  = VTSExperimentOpts.stimDur;
 else
     error('specifications needed');
@@ -40,16 +40,14 @@ end
 
 %% Figure out duration of On/Off periods
 
-
-% calculate the length of an off period
-if mod(stimDur, nrPulsesPerStim) ~= 0
+if mod( blankStimDur, stimDur) ~= 0 
     error('Number of pulses does not match stimulus duration')
 end
 
-pulseOffDur = (stimDur/ nrPulsesPerStim) - pulseOnDurSamp;
+pulseOffDur = ((stimDur*1000)/ nrPulsesPerStim) - pulseOnDur;
 
 % Store durations (in msec or sec up to now) in samples
-pulseOnDurSamp = (pulseOnDurSamp/1000) * NIdaqRate; %msec
+pulseOnDurSamp = (pulseOnDur/1000) * NIdaqRate; %msec
 pulseOffDurSamp = (pulseOffDur/1000) * NIdaqRate; % msec
 
 blankStimDurRatio = blankStimDur/ stimDur;
@@ -151,7 +149,7 @@ end
 fileName = sprintf('sub-%s_ses-%s_task-%s_run-%d', subjID, sessionID, experiment,runID);
 
 save(fullfile('./Stimuli',sprintf('%s.mat', fileName)),...
-    'vibrotactileStimulus','params', 'VTSSessionOptions', 'VTSExperimentOpts')
+    'vibrotactileStimulus','params', 'VTSOpts', 'VTSExperimentOpts')
 
 % check whether figures should be made
 if makeFigure == 1
@@ -160,21 +158,22 @@ if makeFigure == 1
     imagesc(stimDesignMatrix)
     title (experiment)
     xlabel('Stimulators');
-    ylabel(['Stimulus units (1 unit = ', num2str(VTSExperimentOpts.stimDur), ' s)']);
+    ylabel(['Stimulus units (1 unit = ', num2str(stimDur), ' s)']);
     saveas(f, fullfile('./StimImages', sprintf('%s.png',fileName)))
 end
 
-% Set values for tsv file
- %loop through every stimulus presentation
- stimulusDuration = stimulusSignalDuration/NIdaqRate; % in seconds
- 
- idx = find(diff(stimDesignMatrix)==1);
- for ii = 1: length (idx)
-    tsv.onset(ii) = stimDesignMatx(idx,1);
-    tsv.stimNums  = find((stimDesignMatrix(idx,:) ==1));
- end
-tsv.stimFile = sprintf('%s.mat', fileName);
-tsv.duration = stimulusDuration; %in seconds
-tsv.trialType = experiment;
+%% Set values for tsv file
 
+% find the onsets and stimulator numbers using the experiment design matrix
+% to find the time point when a stimulus is presented (a 0 becomes a 1)
+ [onsets, stimNums] = find(diff(stimDesignMatrix)==1);
+     sortedOnsets = sort(onsets);
+ for ii = 1: length(onsets)
+ idx = find(onsets == sortedOnsets(ii));
+    tsv.onsets(ii) = sortedOnsets(ii)*stimDur;
+    tsv.duration(ii) = stimDur; %in seconds
+    tsv.stimNums (ii)  = {stimNums(idx)'};
+    tsv.stimFile{ii} = sprintf('%s.mat', fileName);
+    tsv.trialType{ii} = experiment;
+ end
 end

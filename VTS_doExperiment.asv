@@ -57,11 +57,11 @@ if ~quitProg
     fName = sprintf('sub-%s_ses-%s%s_task-%s_run-%d', ...
                 params.subjID, params.site, params.sessionID, params.experiment, params.runID);
     % Write out the tsv file
-    onset = tsv.onsets';
-    duration = tsv.duration';
-    stimNums = tsv.stimNums';
-    stimFile = tsv.stimFile';
-    trialType = tsv.trialType';
+    onset = tsv.onsets;
+    duration = tsv.duration;
+    stimNums = tsv.stimNums;
+    stimFile = tsv.stimFile;
+    trialType = tsv.trialType;
 
     stimulus = table(onset, duration, stimNums, stimFile , trialType);
    

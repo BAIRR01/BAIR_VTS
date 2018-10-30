@@ -8,13 +8,13 @@ function VTSDevice = VTS_setupVibrotactileDevice(VTSOpts)
 %
 %% Check for Options and inputs
 
-if exist('VTSOptions' , 'var') && ~isempty(VTSOpts)
+if exist('VTSOpts' , 'var') && ~isempty(VTSOpts)
     NIdaqNames = VTSOpts.NIdaqNames;
     nrStimulators = VTSOpts.nrStimulators;
     NIdaqRate = VTSOpts.NIdaqRate;
 end
 if ~exist('nrStimulators', 'var')
-    error ('\n\nnrStimulators is a required input\n\n')
+    error ('\n\n nrStimulators is a required input\n\n')
 end
 if ~exist('NIdaqRate', 'var')
     error ('\n\nNIdaqRate is a required input\n\n')
