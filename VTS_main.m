@@ -13,26 +13,26 @@ if ~selectionMade, return; end
 if ~ssDefined, return; end
 
 % What general stimulus parameters?
-[VTSOptions, fileSelected] = VTS_selectSessionOptions();
-if ~fileSelected, return; end
-
-% What experiment list?
-[experimentsList, experimentStimFilesList, experimentsRunIDs, fileSelected] = VTS_selectExperimentsList;
+[VTSOpts, fileSelected] = VTS_selectSessionOptions();
 if ~fileSelected, return; end
 
 % Setup the device
-VTSDevice = VTS_setupVibrotactileDevice(VTSOptions);
+VTSDevice = VTS_setupVibrotactileDevice(VTSOpts);
+
+% What experiment list?
+[experimentsList, experimentOptsList, runIDs, fileSelected] = VTS_selectExperimentsList;
+if ~fileSelected, return; end
 
 % Run these experiments!
 for ii = 1:length(experimentsList)
     % Read the content of the stimulus json file
-    json = loadjson(experimentStimFilesList{ii});
+    json = loadjson(experimentOptsList{ii});
     
     % Assign json fields to VTSOptions fields
-    VTSExperimentOptions = json.VTSExperimentOptions;
+    VTSExperimentOpts = json.VTSExperimentOptions;
     
-    quitProg = VTS_runme(experimentsList{ii}, experimentsRunIDs(ii),...
-        experimentSpecs(whichSite,:), subjID, sessionID, VTSOptions, VTSDevice, VTSExperimentOptions);
+    quitProg = VTS_runme(experimentsList{ii}, runIDs(ii), experimentSpecs(whichSite,:),...
+        subjID, sessionID, VTSOpts, VTSDevice, VTSExperimentOpts);
     if quitProg, break; end
 end
 

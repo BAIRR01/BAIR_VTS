@@ -1,4 +1,4 @@
-function [experimentList, experimentStimFilesList, experimentsRunIDs, selectionMade] = VTS_selectExperimentsList
+function [experimentList, experimentOptsList, runIDs, selectionMade] = VTS_selectExperimentsList
 
 % Prompt user input to load file
 [fnameTMP,pathTMP,fileselectedTMP] = uigetfile(fullfile('./StimOrders','*.txt'),...
@@ -9,7 +9,7 @@ if fileselectedTMP
     experimentList = importdata(fullfile(pathTMP,fnameTMP));
     
     %initialize list with filenames of stimulus opts
-    experimentStimFilesList = cell(size(experimentList));
+    experimentOptsList = cell(size(experimentList));
     
     % Parse the filename string
     experimentTypes = unique(experimentList);
@@ -18,16 +18,16 @@ if fileselectedTMP
         % select options for experiment type
         stimOptPath = VTS_selectExperimentOptions(experimentTypes{ii});
         %add to array
-        experimentStimFilesList(find(ismember(experimentList, experimentTypes(ii)))) = {stimOptPath};
+        experimentOptsList(find(ismember(experimentList, experimentTypes(ii)))) = {stimOptPath};
         
         idx = find(strcmp(experimentList, experimentTypes(ii)));
         for jj = 1:length(idx)
-            experimentsRunIDs(idx(jj)) = jj;
+            runIDs(idx(jj)) = jj;
         end
     end
     selectionMade = 1;
 else
-    experimentsRunIDs = [];
+    runIDs = [];
     selectionMade = 0;
 end
 end

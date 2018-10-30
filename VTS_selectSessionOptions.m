@@ -1,4 +1,4 @@
-function [VTSOptions, selectionMade] = VTS_selectSessionOptions
+function [VTSOpts, selectionMade] = VTS_selectSessionOptions
 
 [fname,path,fileselected] = uigetfile(fullfile('./SessionOpts','*.json')...
     ,'Select VTS Options file');
@@ -9,7 +9,7 @@ if ~fileselected
     if string(answer) == 'Y'||'y'
         VTSoptPath = VTS_makeSessionOptFile;
     else
-        VTSOptions                  = [];
+        VTSOpts                  = [];
         selectionMade               = 0;
         return
     end
@@ -21,7 +21,7 @@ end
 json = loadjson(VTSoptPath);
 
 % Assign json fields to VTSOptions fields
-VTSOptions = json.VTSOptions;
+VTSOpts = json.VTSOpts;
 selectionMade                         = 1;
 
 

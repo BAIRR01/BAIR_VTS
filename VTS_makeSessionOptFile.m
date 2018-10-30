@@ -11,17 +11,17 @@ defaults = {'8', '1000', 'cDAQ1mod1', ...
 [answer] = inputdlg(prompt, 'VTS Options', 1, defaults);
 
 if ~isempty(answer)
-    json.VTSOptions.nrStimulators    = str2double(answer{1,:});
-    json.VTSOptions.NIdaqRate        = str2double(answer{2,:});
-    json.VTSOptions.NIdaqNames       = {answer{3,:}};
-    json.VTSOptions.optionFileName   = answer{4,:};
+    json.VTSOpts.nrStimulators    = str2double(answer{1,:});
+    json.VTSOpts.NIdaqRate        = str2double(answer{2,:});
+    json.VTSOpts.NIdaqNames       = {answer{3,:}};
+    json.VTSOpts.optionFileName   = answer{4,:};
     selectionMade               = 1;
 else
-    json.VTSOptions             = [];
+    json.VTSOpts             = [];
     selectionMade               = 0;
 end
 
 if ~selectionMade, return; end
-VTSoptPath = fullfile('./SessionOpts', sprintf('%s.json', json.VTSOptions.optionFileName));
+VTSoptPath = fullfile('./SessionOpts', sprintf('%s.json', json.VTSOpts.optionFileName));
 savejson('', json, 'FileName', VTSoptPath);
 end
