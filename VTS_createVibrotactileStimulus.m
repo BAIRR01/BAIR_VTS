@@ -149,7 +149,7 @@ end
 fileName = sprintf('sub-%s_ses-%s_task-%s_run-%d', subjID, sessionID, experiment,runID);
 
 save(fullfile('./Stimuli',sprintf('%s.mat', fileName)),...
-    'vibrotactileStimulus','params', 'VTSOpts', 'VTSExperimentOpts')
+    'vibrotactileStimulus','params', 'VTSOpts', 'VTSExperimentOpts','stimDesignMatrix')
 
 % check whether figures should be made
 if makeFigure == 1
