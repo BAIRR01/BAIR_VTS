@@ -1,10 +1,12 @@
-function [elapsedTime, storedValues] = sampleDataglove (glovePointer)
+function [elapsedTime, datagloveValues] = sampleDataglove (glovePointer)
 
 t0 = GetSecs();
 
+% take dataglove measurements at these time points
 sampleTimes = 0.050:0.050:10;
 
-storedValues = zeros(length(sampleTimes), 5);
+sensors = 3:3:15;
+datagloveValues = zeros(length(sampleTimes), 5);
 
 for ii = 1:length(sampleTimes)
     disp(sampleTimes(ii)); drawnow();
@@ -13,10 +15,9 @@ for ii = 1:length(sampleTimes)
     end
     
     t1 = GetSecs;
-    for jj = 1:5
-        sensor = (jj-1)*3;
+    for jj = 1:length(sensors)
         % Get the value of the each sensor
-        storedValues(ii,jj) = calllib('glovelib', 'fdGetSensorRaw', glovePointer, sensor);
+        datagloveValues(ii,jj) = calllib('glovelib', 'fdGetSensorRaw', glovePointer, sensors(jj));
     end
     t2 = GetSecs - t1; elapsedTime(ii) = t2;
 end

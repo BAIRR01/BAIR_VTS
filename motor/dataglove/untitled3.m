@@ -1,3 +1,5 @@
+% from presentation
+
 % # gestures, default learning scenario.
 % 
 % # parameters
@@ -17,3 +19,11 @@
 % 
 % ## scheme
 % $picture_duration = 2000; # ms
+
+glovePointer = initializeDataGlove();
+        
+         % Clean up
+        unloadlibrary('glovelib');
+        
+        
+        

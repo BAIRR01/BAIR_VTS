@@ -48,7 +48,7 @@ params.makeFigure = 1;
 if contains(task, 'tactile','IgnoreCase',true)
     quitProg = VTS_doExperiment(params, VTSOptions, VTSDevice, VTSStimulusOptions);
 elseif contains(task, 'tactile','IgnoreCase',true)
-    
+    %figure out if you can use the bair runme for this
 end
 
 end
