@@ -1,0 +1,10 @@
+{
+	"VTSOpts": {
+		"nrStimulators": 6,
+		"NIdaqRate": 1000,
+		"NIdaqNames": [
+			"cDAQ1mod1"
+		],
+		"optionFileName": "VTSOptsGeneral"
+	}
+}

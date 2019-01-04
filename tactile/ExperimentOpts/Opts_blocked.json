@@ -1,0 +1,15 @@
+{
+	"VTSExperimentOpts": {
+		"blankStimDur": 12,
+		"preExpBlanks": 0,
+		"postExpBlanks": 1,
+		"nrCyclesPerExp": 6,
+		"nrStimPerCycle": 2,
+		"nrBlanksPerCycle": 2,
+		"stimDur": 6,
+		"nrPulsesPerStim": 12,
+		"pulseOnDur": 400,
+		"vibrFreq": 30,
+		"optsFname": "Opts_blocked"
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"VTSExperimentOptions": {
+		"blankStimulusDuration": 12,
+		"startBlanksPerExperiment": 1,
+		"endBlanksPerExperiment": 1,
+		"nrCyclesPerExperiment": 6,
+		"nrStimuliPerCycle": 6,
+		"nrBlanksPerCycle": 0,
+		"optionFileName": "Opts_descending"
+	},
+	"VTSOptions": {
+		"tactileStimulusDuration": 6,
+		"nrOnOffPeriodsPerStimulus": 12,
+		"tactileOnOffRatio": 0.8,
+		"tactileFrequency": 30
+	}
+}
