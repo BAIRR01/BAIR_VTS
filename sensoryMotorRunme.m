@@ -44,11 +44,16 @@ params.skipSyncTests = 1;
 % store stimulus as figure
 params.makeFigure = 1;
 
+
 % Go!
 if contains(task, 'tactile','IgnoreCase',true)
+    params.sensoryDomain = 'tactile';
     quitProg = VTS_doExperiment(params, VTSOptions, VTSDevice, VTSStimulusOptions);
-elseif contains(task, 'tactile','IgnoreCase',true)
+elseif contains(task, 'motor','IgnoreCase',true)
     %figure out if you can use the bair runme for this
+    params.sensoryDomain = 'motor';
+    params.glovePointer = initializeDataGlove;
+    quitProg = doExperiment(params);
 end
 
 end

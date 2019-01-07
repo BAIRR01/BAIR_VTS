@@ -13,8 +13,8 @@ if ~selectionMade, return; end
 if ~ssDefined, return; end
 
 % Which type of experiment?
-[taskDefined, selectionMade] = bairWhichExperiment();
-if ~taskDefined, return; end
+[task, selectionMade] = bairWhichExperiment();
+if ~task, return; end
 
 % What experiment list?
 [experimentsList, experimentOptsList, runIDs, fileSelected] = selectExperimentsList(task);
