@@ -17,6 +17,7 @@ params.subjID           = subjID;
 params.runID            = experimentRunID;
 params.sessionID        = sessionID;
 params.modality         = siteSpecs.modalities{1};
+params.loadMatrix       = sprintf('%s_%s.mat', siteSpecs.sites{1}, experiment);
 params.site             = siteSpecs.sites{1};
 params.calibration      = siteSpecs.displays{1};
 params.triggerKey       = siteSpecs.trigger{1};

@@ -1,7 +1,7 @@
 function [experimentList, experimentOptsList, runIDs, selectionMade] = selectExperimentsList(task)
 
 % Prompt user input to load file
-[fnameTMP,pathTMP,fileselectedTMP] = uigetfile(fullfile('./runme','*.txt'),...
+[fnameTMP,pathTMP,fileselectedTMP] = uigetfile(fullfile(sensorimotorRootPath,'runme','*.txt'),...
     'Select experiment sequence file');
 
 if fileselectedTMP
