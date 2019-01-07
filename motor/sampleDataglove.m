@@ -3,9 +3,9 @@ function [elapsedTime, datagloveValues] = sampleDataglove (glovePointer)
 t0 = GetSecs();
 
 % take dataglove measurements at these time points
-sampleTimes = 0.050:0.050:10;
+sampleTimes = 0.020:0.020:10;
 
-sensors = 3:3:15;
+sensors = 0:3:12;
 datagloveValues = zeros(length(sampleTimes), 5);
 
 for ii = 1:length(sampleTimes)
