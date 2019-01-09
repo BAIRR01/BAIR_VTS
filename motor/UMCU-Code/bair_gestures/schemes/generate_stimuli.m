@@ -1,4 +1,4 @@
-function generate_stimuli_old(condition, scan_period, isi_min, isi_max, max_dur)
+function generate_stimuli(condition, scan_period, isi_min, isi_max, max_dur)
 %GENERATE_STIMULI write stimuli (onsets and bitmaps) in the correct scheme 
 % folder
 %
@@ -28,9 +28,9 @@ n_bitmaps = 4;
 port_code_offset = 10; 
 
 % convert from seconds to scans
-isi_min = round(isi_min / scan_period * 1000);
-isi_max = round(isi_max / scan_period * 1000);
-max_dur = round(max_dur / scan_period * 1000);
+isi_min1 = round(isi_min / scan_period* 1000);
+isi_max1 = round(isi_max / scan_period* 1000);
+max_dur1 = round(max_dur / scan_period* 1000);
 fprintf('ISI (in integer scans), min: %d, max: %d, max number of scans: %d\n', ...
     isi_min, isi_max, max_dur);
 
