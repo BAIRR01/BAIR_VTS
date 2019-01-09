@@ -13,16 +13,16 @@ if ~selectionMade, return; end
 if ~ssDefined, return; end
 
 % Which type of experiment?
-[task, selectionMade] = bairWhichExperiment();
-if ~task, return; end
+[sensoryDomain, selectionMade] = bairWhichSensoryModality();
+if ~selectionMade, return; end
 
 % What experiment list?
-[experimentsList, experimentOptsList, runIDs, fileSelected] = selectExperimentsList(task);
+[experimentsList, experimentOptsList, runIDs, fileSelected] = selectExperimentsList(sensoryDomain);
 if ~fileSelected, return; end
 
 % For the moment, tactile and motor stimuli are handled differently so call
 % them separately
-switch task
+switch sensoryDomain
     case 'TACTILE'
         % What general stimulus parameters?
         [VTSOpts, fileSelected] = VTS_selectSessionOptions();
@@ -41,7 +41,7 @@ switch task
             
             % Run it
             quitProg = sensoryMotorRunme(experimentsList{ii}, runIDs(ii), experimentSpecs(whichSite,:),...
-                subjID, sessionID, VTSOpts, VTSDevice, VTSExperimentOpts, task);
+                subjID, sessionID, VTSOpts, VTSDevice, VTSExperimentOpts, sensoryDomain);
             if quitProg, break; end
         end
         
@@ -50,12 +50,12 @@ switch task
          % Run it
         for ii = 1:length(experimentsList)
             quitProg = sensoryMotorRunme(experimentsList{ii}, runIDs(ii), experimentSpecs(whichSite,:),...
-                subjID, sessionID, [],[], [], task);
+                subjID, sessionID, [],[], [], sensoryDomain);
             if quitProg, break; end
         end
        
     otherwise
-        error('Cannot run selected task: %s', task)
+        error('Cannot run selected task: %s', sensoryDomain)
         
 end
 
