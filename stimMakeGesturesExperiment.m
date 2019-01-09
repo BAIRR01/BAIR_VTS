@@ -19,18 +19,20 @@ frameRate           = stimParams.display.frameRate;
 % isi_min =  6; % minimum inter-stimulus distance, between onset times, in s
 % isi_max = 15; % maximum inter-stimulus distance, between onset times, in s
 % max_dur = 480; % maximum duration of the whole task (seconds)
+% isi_min1 = round(isi_min / scan_period* 1000);
+% isi_max1 = round(isi_max / scan_period* 1000);
+% max_dur1 = round(max_dur / scan_period* 1000);
 % n_events = floor(max_dur / ((isi_max + isi_min) / 2));
 % isi = [1; randi(isi_max - isi_min + 1, n_events - 1, 1) + isi_min - 1];
 % onsets = cumsum(isi);
 % events = randi(length(stimulus.cat), n_events, 1);
 
-% 
+ 
 % numBlocks           = 18;
 % desiredBblockLength = 12; % seconds
 % trsPerBlock         = round(desiredBblockLength / TR);
 % blockLength         = trsPerBlock * TR;
 % experimentLength    = blockLength * numBlocks;
-
 
 stimulus = [];
 stimulus.cmap       = stimParams.stimulus.cmap;
@@ -40,6 +42,7 @@ stimulus.display    = stimParams.display;
 stimulus.cat        = [1 2 3 4];
 stimulus.categories = { 'D', 'F', 'V', 'Y'};
 
+% This needs to get fixed
 % stimulus.seqtiming  = 0:1/frameRate:experimentLength;
 % stimulus.seq        = ones(size(stimulus.seqtiming));
 stimulus.fixSeq     = ones(size(stimulus.seqtiming));
@@ -51,7 +54,7 @@ files = dir([bitmapPth '/*jpg']);
 %load in the first bitmap to set a standard size for the rest in case they
 % are not the same
 imageSizeInPixels = size(stimParams.stimulus.images); % based on visual simuli
-tempImg = imread(fullfile(files(1).folder, files(1).name));
+tempImg = imread(fullfile(files(1).folder, 'exec_stim_1.jpg'));
 %resize based on height
 resizedImgSize = size(imresize(tempImg, [imageSizeInPixels(1) NaN]));
 
