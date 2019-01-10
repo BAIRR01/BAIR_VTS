@@ -1,6 +1,6 @@
-function stimMakeGesturesExperiment(stimParams,  runNum, TR, stimDurationSeconds)
-% 
-% NOTE: This is just a framework, will update soon 
+function stimMakeGesturesExperiment(stimParams,  runNum, TR, stimDurationSeconds,experimentType)
+%
+% NOTE: This is just a framework, will update soon
 % Commented text is in need of updating or checking
 %
 
@@ -8,14 +8,15 @@ function stimMakeGesturesExperiment(stimParams,  runNum, TR, stimDurationSeconds
 stimPath = fullfile(sensorimotorRootPath , 'motor','UMCU-Stimuli');
 
 % contains for each bitmap, the fMRI pulse count on which it should be shown
-onsets1 = load('picture_onset_sequence.txt');
+onsets = load('picture_onset_sequence.txt');
 % contains the filenames of the bitmaps to be shown
 imgSeq = importdata('bitmap_filename_sequence.txt');
 
 % Initialize, then set some the stimulus parameters
 frameRate           = stimParams.display.frameRate;
 
-% from provided UMCU code (generate_stimuli.m)
+% from provided UMCU code (generate_stimuli.m) 
+% scan_period = 850; % for mri - equal to Presentation equivalent 
 % isi_min =  6; % minimum inter-stimulus distance, between onset times, in s
 % isi_max = 15; % maximum inter-stimulus distance, between onset times, in s
 % max_dur = 480; % maximum duration of the whole task (seconds)
@@ -27,7 +28,7 @@ frameRate           = stimParams.display.frameRate;
 % onsets = cumsum(isi);
 % events = randi(length(stimulus.cat), n_events, 1);
 
- 
+% this is from stimMakeTaskExperiment and needs to be updated
 % numBlocks           = 18;
 % desiredBblockLength = 12; % seconds
 % trsPerBlock         = round(desiredBblockLength / TR);
@@ -39,23 +40,35 @@ stimulus.cmap       = stimParams.stimulus.cmap;
 stimulus.srcRect    = stimParams.stimulus.srcRect;
 stimulus.dstRect    = stimParams.stimulus.destRect;
 stimulus.display    = stimParams.display;
+
 stimulus.cat        = [1 2 3 4];
 stimulus.categories = { 'D', 'F', 'V', 'Y'};
 
 % This needs to get fixed
 % stimulus.seqtiming  = 0:1/frameRate:experimentLength;
 % stimulus.seq        = ones(size(stimulus.seqtiming));
-stimulus.fixSeq     = ones(size(stimulus.seqtiming));
+% stimulus.fixSeq     = ones(size(stimulus.seqtiming));
 
 % first, find all the bitmaps
 bitmapPth = fullfile(stimPath, 'bitmaps');
 files = dir([bitmapPth '/*jpg']);
 
+switch experimentType
+    case 'GESTURESTRAINING'
+        %figure out which ones are for training
+        trainingIdx = contains({files.name},stimulus.categories);
+        imgFiles = files(trainingIdx);
+    case 'GESTURES'
+        %figure out which ones are for testing
+        testIdx = contains({files.name},'exec_stim');
+        imgFiles = files(testingIdx);
+end
+
 %load in the first bitmap to set a standard size for the rest in case they
-% are not the same
+% are not the same (this is the case with the training images)
 imageSizeInPixels = size(stimParams.stimulus.images); % based on visual simuli
-tempImg = imread(fullfile(files(1).folder, 'exec_stim_1.jpg'));
-%resize based on height
+tempImg = imread(fullfile(imgFiles(1).folder, imgFiles(1).name));
+%resize
 resizedImgSize = size(imresize(tempImg, [imageSizeInPixels(1) NaN]));
 
 % Pre-allocate arrays to store images
@@ -63,9 +76,9 @@ images = zeros([resizedImgSize length(stimulus.categories)], 'uint8');
 
 % Create the stimuli
 for cc = 1:length(stimulus.cat)
-    whichImg = contains({files.name},sprintf('exec_stim_%d', stimulus.cat(cc)));
+    whichImg =  imgFiles(cc);
     imageForThisTrial = imread(fullfile(files(whichImg).folder, files(whichImg).name));
-    image = imresize(imageForThisTrial, [resizedImgSize(1) resizedImgSize(2)]); 
+    image = imresize(imageForThisTrial, [resizedImgSize(1) resizedImgSize(2)]);
     images(:,:,:,cc) = image;
 end
 
@@ -73,7 +86,7 @@ stimulus.images     = images;
 
 % Add triggers for non-fMRI modalities
 switch lower(stimParams.modality)
-    case 'fmri' 
+    case 'fmri'
         % no trigger sequence needed
     otherwise
         % Write binary trigger sequence:
@@ -85,7 +98,7 @@ end
 % stimulus = sparsifyStimulusStruct(stimulus, maxUpdateInterval);
 
 % Create stim_file name
-fname = sprintf('%s_Gestures_%d.mat', site, runNum);
+fname = sprintf('%s_%s_%d.mat', site,lower(experimentType), runNum);
 
 % Add table with elements to write to tsv file for BIDS
 conditions  = { 'D', 'F', 'V', 'Y'};
