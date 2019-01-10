@@ -18,6 +18,18 @@ stimParams = stimInitialize(experimentSpecs, whichSite, stimDiameterDeg);
 
 % Find the selected experiment
 switch experimentType
+    
+     case 'BOLDHAND'
+        stimDurationSeconds = 0.500; % seconds
+        onsetTimeMultiple   = 0.170; % make the onsets multiple of 170 ms, which is 1/5 of the TR
+        numberOfRuns = 1; 
+        
+        for runNum = 1:numberOfRuns
+            % MAKE TASK EXPERIMENT
+            stimMakeBoldHandExperiment(stimParams,  runNum, stimDurationSeconds, onsetTimeMultiple, TR)
+        end 
+        
+        
     case 'GESTURES'
         stimDurationSeconds    = 5;
         numberOfRuns = 1;
@@ -28,14 +40,7 @@ switch experimentType
         end
     case 'FINGERMAPPING'
     
-    case 'BOLDHAND'
-        stimDurationSeconds = 0.5;
-        numberOfRuns = 1;
-        for runNum = 1:numberOfRuns
-            % MAKE TASK EXPERIMENT
-            stimMakeBoldHandExperiment(stimParams,  runNum, TR, stimDurationSeconds)
-        end 
-        
+   
     case 'BOLDSAT'
         
 end
