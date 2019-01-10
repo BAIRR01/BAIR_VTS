@@ -27,7 +27,15 @@ switch experimentType
             stimMakeGesturesExperiment(stimParams, runNum, TR, stimDurationSeconds);
         end
     case 'FINGERMAPPING'
+    
     case 'BOLDHAND'
+        stimDurationSeconds = 0.5;
+        numberOfRuns = 1;
+        for runNum = 1:numberOfRuns
+            % MAKE TASK EXPERIMENT
+            stimMakeBoldHandExperiment(stimParams,  runNum, TR, stimDurationSeconds)
+        end 
+        
     case 'BOLDSAT'
         
 end
